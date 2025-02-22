@@ -1,0 +1,165 @@
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: transparent;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .form-container {
+        max-width: 600px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-align: center;
+    }
+    .form-container h2 {
+        color: #000;
+        font-size: 26px;
+        margin-bottom: 15px;
+    }
+    .form-container label {
+        font-weight: 600;
+        display: block;
+        margin-top: 10px;
+        color: #000;
+        text-align: left;
+    }
+    .form-container input,
+    .form-container select,
+    .form-container textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.15);
+        color: #000;
+        outline: none;
+    }
+    .form-container input::placeholder,
+    .form-container textarea::placeholder {
+        color: #666;
+    }
+    .form-container input:focus,
+    .form-container textarea:focus {
+        border: 1px solid #00c9ff;
+    }
+    .form-container button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #00c9ff, #00ff87);
+        border: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: 0.3s;
+    }
+    .form-container button:hover {
+        opacity: 0.8;
+    }
+</style>
+
+<div class="form-container">
+    <h2>LeafyFest Registration</h2>
+    <form id="applicationForm">
+        <label>Group Type:</label>
+        <select name="group-type" id="groupType">
+            <option value="Tech Group">Tech Group</option>
+            <option value="Airline">Airline</option>
+            <option value="Other">Other</option>
+        </select>
+        
+        <label>Name of your group:</label>
+        <input type="text" name="group-name" required>
+
+        <label>What rank are you in your group?</label>
+        <input type="text" name="rank" required>
+
+        <label>Group description:</label>
+        <textarea name="description" rows="4" required></textarea>
+
+        <label>Airline/Group Logo (Paste Discord image link):</label>
+        <input type="text" name="logo-link" required>
+
+        <label>Airline/Group Picture (Paste Discord image link):</label>
+        <input type="text" name="image-link" required>
+
+        <label>Discord Server Invite:</label>
+        <input type="text" name="discord-invite" required>
+
+        <label>Roblox Group Link:</label>
+        <input type="text" name="roblox-group" required>
+
+        <label>Discord Username:</label>
+        <input type="text" name="discord-username" required>
+
+        <label>Roblox Username:</label>
+        <input type="text" name="roblox-username" required>
+
+        <label>Roblox User ID:</label>
+        <input type="text" name="roblox-id" required>
+        
+        <label>Discord User ID:</label>
+        <input type="text" name="discord-userid" required>
+
+        <label>Choose an option:</label>
+        <input type="radio" name="selling" value="Selling Merch (15 Robux)" required> Selling merch at LeafyFest (15 Robux)
+        <input type="radio" name="selling" value="Not Selling Merch"> Not selling merch at LeafyFest
+
+        <label>Please agree that booths can only be under 500 parts:</label>
+        <input type="checkbox" name="agree" required> I agree.
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("applicationForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        const webhookURL = "https://discord.com/api/webhooks/1342855325367406592/UBQZMSAKsUbZlGrATRYOqwH3A3UMdcPLH3ybPWhTakWwP9thPMRpDPpdgka-ImWtWh0G";
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+
+        const payload = {
+            content: "New LeafyFest Registration",
+            embeds: [
+                {
+                    title: "LeafyFest Registration Form Submission",
+                    fields: Object.keys(data).map(key => ({
+                        name: key.replace(/-/g, " ").toUpperCase(),
+                        value: data[key] || "None",
+                        inline: false
+                    })),
+                    color: 3447003
+                }
+            ]
+        };
+
+        fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        }).then(response => {
+            if (response.ok) {
+                alert("Form submitted successfully!");
+                event.target.reset();
+            } else {
+                alert("Failed to submit the form.");
+            }
+        }).catch(error => {
+            console.error("Error submitting form:", error);
+            alert("An error occurred.");
+        });
+    });
+</script>
